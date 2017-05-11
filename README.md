@@ -34,3 +34,7 @@ sudo ./CentOS7.sh
 ```
 
 Next hold tight and watch it set-up the server. It may take 15 minutes just securing the server as part of the script generates DH parameters to secure NGINX (this could take up to 1 hour on 1 core DigitalOcean VPS’s).
+
+## Once installed, issue a server reboot with the following command:
+
+`shutdown -r now`

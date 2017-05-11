@@ -28,7 +28,7 @@ THIS SCRIPT SHOULD BE USED ON A **NEW SERVER**. THIS SCRIPT INSTALLS VESTACP.
 ## Run The Following Commands To Install The VestaCP Server Installer:
 
 ```
-wget https://vestacp.ss88.uk/VestaCP_Installer/CentOS7.sh
+wget https://vestacp.ss88.uk/VestaCP_Installer/CentOS7.sh -O ./CentOS7.sh
 chmod 777 ./CentOS7.sh
 sudo ./CentOS7.sh
 ```

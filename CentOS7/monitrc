@@ -1,0 +1,91 @@
+set daemon  60
+set logfile syslog facility log_daemon
+set mailserver vSMTPHostname port vSMTPPort username "vSMTPEmail" password "vSMTPPassword"
+set mail-format { from: vSMTPEmail }
+set alert vEmail
+set httpd port 2812 and allow admin:"vPassword"
+
+
+check process SSH with pidfile /var/run/sshd.pid
+  start program  "/sbin/service sshd restart"
+  stop program  "/sbin/service sshd stop"
+  if failed port 22 protocol ssh for 5 cycles then restart
+
+ check process Cron with pidfile /var/run/crond.pid
+  group cron
+  start program = "/sbin/service crond restart"
+  stop  program = "/sbin/service crond stop"
+
+check process FTP
+  matching vsftpd
+  start program = "/sbin/service vsftpd restart"
+  stop program = "/sbin/service vsftpd stop"
+  if failed port 21 protocol ftp for 5 cycles then restart
+
+check process LFD with pidfile /var/run/lfd.pid
+  start program = "/sbin/service lfd restart"
+  stop program = "/sbin/service lfd stop"
+
+check process Exim with pidfile /var/run/exim.pid
+  start program = "/sbin/service exim restart"
+  stop  program = "/sbin/service exim stop"
+  if failed port 25 protocol smtp for 5 cycles then restart
+
+check process Dovecot with pidfile /var/run/dovecot/master.pid
+  start program = "/sbin/service dovecot restart"
+  stop program = "/sbin/service dovecot stop"
+  group dovecot
+  if failed port 143 protocol imap for 5 cycles then restart
+
+check process SpamAssassin with pidfile /var/run/spamd.pid
+  start program "/sbin/service spamassassin restart"
+  stop program "/sbin/service spamassassin stop"
+  if cpu > 90% for 5 cycles then restart
+  if mem usage > 95% for 5 cycles then restart
+
+check process NGINX with pidfile /var/run/nginx.pid
+  start program = "/sbin/service nginx restart"
+  stop program  = "/sbin/service nginx stop"
+  group nginx
+  if failed host IPAddress port 443 type TCPSSL for 3 cycles then restart
+
+check process DNS-Server with pidfile /var/run/named/named.pid
+  start program = "/sbin/service named restart"
+  stop program = "/sbin/service named stop"
+  if 5 restarts within 5 cycles then timeout
+  if failed host 127.0.0.1 port 53 type tcp protocol dns for 5 cycles then restart
+  if failed host 127.0.0.1 port 53 type udp protocol dns for 5 cycles then restart
+
+check process PHP-FPM with pidfile /var/run/php-fpm/php-fpm.pid
+  start program = "/sbin/service php-fpm restart"
+  stop program = "/sbin/service php-fpm stop"
+
+check process Vesta-NGINX with pidfile /var/run/vesta-nginx.pid
+  start program = "/sbin/service vesta restart"
+  stop program = "/sbin/service vesta stop"
+
+check process Vesta-PHP with pidfile /var/run/vesta-php.pid
+  start program = "/sbin/service vesta restart"
+  stop program = "/sbin/service vesta stop"
+
+check process MariaDB with pidfile /var/run/mariadb/mariadb.pid
+  group mysql
+  start program = "/sbin/service mariadb restart"
+  stop program = "/sbin/service mariadb stop"
+  if failed host 127.0.0.1 port 3306 protocol mysql then restart
+
+check system $HOST
+  if loadavg (5min) > 3 for 4 cycles then alert
+  if loadavg (15min) > 1 for 4 cycles then alert
+  if memory usage > 80% for 4 cycles then alert
+  if swap usage > 40% for 4 cycles then alert
+  if cpu usage (user) > 80% for 4 cycles then alert
+  if cpu usage (system) > 20% for 4 cycles then alert
+  if cpu usage (wait) > 20% for 4 cycles then alert
+
+check filesystem "Drive" with path /
+  if space usage > 80% for 8 cycles then alert
+
+include /etc/monit.d/*
+
+

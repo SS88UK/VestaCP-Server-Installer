@@ -69,7 +69,7 @@ function StartTheProcess()
 
 		echo 'nameserver 127.0.0.1' | cat - /etc/resolv.conf > temp && mv temp /etc/resolv.conf
 		chattr +i /etc/resolv.conf
-		curl https://vestacp.ss88.uk/VestaCP_Installer/CentOS7/named.conf > /etc/named.conf
+		curl https://raw.githubusercontent.com/SS88UK/VestaCP-Server-Installer/master/CentOS7/named.conf > /etc/named.conf
 		/sbin/service named restart
 
 
@@ -82,9 +82,9 @@ function StartTheProcess()
 			a="`netstat -i | cut -d' ' -f1 | grep eth0`";
 			b="`netstat -i | cut -d' ' -f1 | grep venet0:0`";
 			if [ "$a" == "eth0" ]; then
-				curl https://vestacp.ss88.uk/VestaCP_Installer/CentOS7/sysctl.conf-eth0 > /etc/sysctl.conf
+				curl https://raw.githubusercontent.com/SS88UK/VestaCP-Server-Installer/master/CentOS7/sysctl.conf-eth0 > /etc/sysctl.conf
 			elif [ "$b" == "venet0:0" ]; then
-				curl https://vestacp.ss88.uk/VestaCP_Installer/CentOS7/sysctl.conf-venet0 > /etc/sysctl.conf
+				curl https://raw.githubusercontent.com/SS88UK/VestaCP-Server-Installer/master/CentOS7/sysctl.conf-venet0 > /etc/sysctl.conf
 			fi
 			sysctl -p
 
@@ -94,10 +94,10 @@ function StartTheProcess()
 
 		# Set SpamAssassin Rules + Extras
 
-		curl https://vestacp.ss88.uk/VestaCP_Installer/CentOS7/dnsbl.conf > /etc/exim/dnsbl.conf
-		curl https://vestacp.ss88.uk/VestaCP_Installer/CentOS7/custom_SA-rules.cf > /etc/mail/spamassassin/custom_SA-rules.cf
+		curl https://raw.githubusercontent.com/SS88UK/VestaCP-Server-Installer/master/CentOS7/dnsbl.conf > /etc/exim/dnsbl.conf
+		curl https://raw.githubusercontent.com/SS88UK/VestaCP-Server-Installer/master/CentOS7/custom_SA-rules.cf > /etc/mail/spamassassin/custom_SA-rules.cf
 		sed -i 's/rfc1413_query_timeout = 5s/rfc1413_query_timeout = 0s/' /etc/exim/exim.conf
-		curl https://vestacp.ss88.uk/VestaCP_Installer/CentOS7/90-quota.conf > /etc/dovecot/conf.d/90-quota.conf
+		curl https://raw.githubusercontent.com/SS88UK/VestaCP-Server-Installer/master/CentOS7/90-quota.conf > /etc/dovecot/conf.d/90-quota.conf
 		sed -i 's/mail_plugins = .*/mail_plugins = $mail_plugins autocreate quota imap_quota/' /etc/dovecot/conf.d/20-imap.conf
 		echo "mail_max_userip_connections = 50" >> /etc/dovecot/conf.d/10-mail.conf
 		echo "mail_fsync = never" >> /etc/dovecot/conf.d/10-mail.conf
@@ -136,14 +136,14 @@ function StartTheProcess()
 
 		fi
 
-		curl https://vestacp.ss88.uk/VestaCP_Installer/CentOS7/nginx.conf > /etc/nginx/nginx.conf
+		curl https://raw.githubusercontent.com/SS88UK/VestaCP-Server-Installer/master/CentOS7/nginx.conf > /etc/nginx/nginx.conf
 
 	# ---------------------------------
 
 		# Let's fix PHP-FPM
 
-		curl https://vestacp.ss88.uk/VestaCP_Installer/CentOS7/default.tpl > /usr/local/vesta/data/templates/web/php-fpm/default.tpl
-		curl https://vestacp.ss88.uk/VestaCP_Installer/CentOS7/socket.tpl > /usr/local/vesta/data/templates/web/php-fpm/socket.tpl
+		curl https://raw.githubusercontent.com/SS88UK/VestaCP-Server-Installer/master/CentOS7/default.tpl > /usr/local/vesta/data/templates/web/php-fpm/default.tpl
+		curl https://raw.githubusercontent.com/SS88UK/VestaCP-Server-Installer/master/CentOS7/socket.tpl > /usr/local/vesta/data/templates/web/php-fpm/socket.tpl
 		/usr/local/vesta/bin/v-rebuild-web-domains admin
 		
 	# ---------------------------------
@@ -158,7 +158,7 @@ function StartTheProcess()
 		# Let's install Monit & Configure it
 
 		yum -y install monit
-		curl https://vestacp.ss88.uk/VestaCP_Installer/CentOS7/monitrc > /etc/monitrc
+		curl https://raw.githubusercontent.com/SS88UK/VestaCP-Server-Installer/master/CentOS7/monitrc > /etc/monitrc
 		sed -i "s/vPassword/$vPassword/" /etc/monitrc
 		sed -i "s/vEmail/$vEmail/" /etc/monitrc
 		sed -i "s/IPAddress/$IPAddress/" /etc/monitrc
@@ -176,7 +176,7 @@ function StartTheProcess()
 		curl https://vestacp.ss88.uk/Install_CSF_on_VestaCP/Install.sh > ./InstallCSF.sh
 		chmod 777 ./InstallCSF.sh
 		sudo ./InstallCSF.sh
-		curl https://vestacp.ss88.uk/VestaCP_Installer/CentOS7/csf.conf > /etc/csf/csf.conf
+		curl https://raw.githubusercontent.com/SS88UK/VestaCP-Server-Installer/master/CentOS7/csf.conf > /etc/csf/csf.conf
 		sed -i "s/vEmail/$vEmail/" /etc/csf/csf.conf
 		curl https://raw.githubusercontent.com/SS88UK/CSF-Custom-Regex-for-VestaCP/master/regex.custom.pm > /etc/csf/regex.custom.pm
 

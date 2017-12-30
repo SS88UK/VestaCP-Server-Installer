@@ -1,5 +1,3 @@
-### Currently porting the code over. Once this line is removed from the Readme all the code will be on GitHub.
-
 # VestaCP-Server-Installer
 Install VestaCP with mandatory security changes, etc on CentOS 7
 

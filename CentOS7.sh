@@ -151,7 +151,7 @@ function StartTheProcess()
 		# Make it HTTP2 and SPDY
 		
 		sed -i 's/\%web_ssl_port\%/\%web_ssl_port\% ssl http2/' /usr/local/vesta/data/templates/web/nginx/php-fpm/*.stpl
-		sed -i 's/\%web_port\%/\%web_port\% spdy/' /usr/local/vesta/data/templates/web/nginx/php-fpm/*.tpl
+		#sed -i 's/\%web_port\%/\%web_port\% spdy/' /usr/local/vesta/data/templates/web/nginx/php-fpm/*.tpl
 
 	# ---------------------------------
 
